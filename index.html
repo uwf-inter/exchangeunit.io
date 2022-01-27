@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>単位変換サイト</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-logo">単位変換サイト</div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="before">
+                <h3 class="subtitle">変換前</h3>
+                <div>
+                    <div class="box">
+                        <div class="text_box">
+                            <input type="text" id="input" value="数値を入力してください">
+                        </div>
+                        <select id="before_unit" onchange="getSelectUnit()">
+                            <option>cm</option>
+                            <option>m</option>
+                            <option>mm</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="after">
+                <h3 class="subtitle">変換後</h3>
+            </div>
+            <div class="box">
+            <div class="text_box">
+                <input type="text" id="output_box" value="">
+            </div>
+                <select id="change_unit" onchange="getChangeUnit()">
+                    <option>cm</option>
+                    <option>m</option>
+                    <option>mm</option>
+                </select>
+            </div>
+            <div class="box">
+                <p><span id="output"></span></p>
+                <!–<input type="text">
+            </div>
+            <div class="exchange">
+                <button type="button" id="trigger" class="exchange_btn">変換！</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // インプットに入力された値を抽出
+        let inputData = document.getElementById('input');
+        let outputData = document.getElementById('output');
+
+        // プルダウンで選択した変換前の単位を取得
+        function getSelectUnit() {
+            let element = document.getElementById('before_unit');
+            let before_unit = element.value ;
+            return before_unit;
+        }
+
+        // プルダウンで選択した変換後の単位を取得
+        function getChangeUnit() {
+            let element = document.getElementById('change_unit');
+            let after_unit = element.value ;
+            return after_unit;
+        }
+
+        //値をテキストボックスに変換する処理
+        function outputTextBox(outputText) {
+            let element = document.getElementById('output_box');
+            element.value = outputText;
+        }
+
+        //選択した単位が同じ際に、処理不可を返す
+        function sameUnit(before,after) {
+            let error_text = '単位が同じです';
+            if(before = after) {
+                outputTextBox(error_text);
+            }
+        }
+
+        //入力フォーカスを得たときの処理
+        inputData.onfocus = function()
+        {
+            if( this.value == this.defaultValue )
+            {
+                this.value = '';
+                this.style.color = '';
+            }
+        }
+        // 入力フォーカスを失ったときの処理
+        inputData.onblur = function()
+        {
+            if( this.value == '' )
+            {
+                this.value = this.defaultValue;
+                this.style.color = 'gray';
+            }
+        }
+        // 透かし文字をdefaultValueプロパティで保持する
+        inputData.defaultValue = inputData.value;
+        inputData.value = '';
+
+        inputData.onblur();
+        // 変換前の単位と変換後の単位を受け取って、計算を実行する
+        //変更ボタンをクリニック→変換前単位＆変換後単位&変換前に入力された値を取得→単位に応じて、計算ロジックを実行
+        document.getElementById("trigger").onclick = function() {
+            let before_unit = getSelectUnit(); //変換前の単位を取得
+            let after_unit = getChangeUnit(); //変換後の単位を取得
+            let inputData = document.getElementById('input').value; //変換前の数値を取得
+            let outputData = document.getElementById('output'); //変換後の数値を出力する先
+
+
+            if(before_unit === "cm") { //変換前単位がcmだったときの処理
+                if(after_unit === "m") {
+                    conversion = inputData*0.01;
+                    outputTextBox(conversion);
+                } else if(after_unit ==="mm") {
+                    conversion = inputData*10;
+                    outputTextBox(conversion);
+                } else sameUnit(before_unit,after_unit);
+
+            } else if (before_unit == 'm'){
+                if(after_unit == 'cm') {
+                    conversion = inputData*100;
+                    outputTextBox(conversion);
+                } else if(after_unit == 'mm') {
+                    conversion = inputData*1000;
+                    outputTextBox(conversion);
+                } else sameUnit(before_unit,after_unit);
+            } else if(before_unit == 'mm'){
+                if(after_unit == 'cm') {
+                    conversion = inputData*0.1;
+                    outputTextBox(conversion);
+                } else if(after_unit == 'm') {
+                    conversion = inputData*0.001;
+                    outputTextBox(conversion);
+                } else sameUnit(before_unit,after_unit);
+            } else console.log('変換不可');
+        };
+
+    </script>
+</body>
+
+</html>
